@@ -117,7 +117,11 @@ export default function AddProductPage() {
               required
             >
               <option value="">Select Category</option>
-             <option value="1">Iphone</option>
+  {categories.map((category) => (
+                <option key={category.CATEGORY_ID} value={category.CATEGORY_ID}>
+                  {category.NAME}
+                </option>
+              ))}
             </select>
           </div>
 
