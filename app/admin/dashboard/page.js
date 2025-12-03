@@ -105,6 +105,9 @@ export default function AdminDashboard() {
         <a href="/admin/products" className="btn-primary">
           Manage Products
         </a>
+        <a href="/admin/categories" className="btn-primary">
+          Manage Categories
+        </a>
         <a href="/admin/orders" className="btn-secondary">
           View All Orders
         </a>
