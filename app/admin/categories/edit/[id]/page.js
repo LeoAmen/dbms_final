@@ -6,6 +6,8 @@ import Link from 'next/link';
 export default function EditCategoryPage() {
   const params = useParams();
   const router = useRouter();
+  
+  // State
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [category, setCategory] = useState(null);
@@ -15,6 +17,7 @@ export default function EditCategoryPage() {
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
 
+  // Initial Fetch
   useEffect(() => {
     if (params.id) {
       fetchCategoryData();
@@ -119,25 +122,37 @@ export default function EditCategoryPage() {
     }
   };
 
+  // Loading State
   if (loading) {
     return (
-      <div className="p-8">
-        <div className="flex justify-center items-center h-64">
-          <div className="text-gray-600">Loading category data...</div>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        <div className="flex justify-center items-center h-screen">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mb-4"></div>
+            <p className="text-xl text-gray-700 font-semibold">Loading category data...</p>
+          </div>
         </div>
       </div>
     );
   }
 
+  // Not Found / Error State
   if (errors.fetch || !category) {
     return (
-      <div className="p-8">
-        <div className="card text-center py-8">
-          <div className="text-red-600 mb-4">
-            {errors.fetch || 'Category not found'}
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl shadow-lg p-8 text-center max-w-md w-full">
+          <div className="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+            <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
           </div>
-          <Link href="/admin/categories" className="btn-primary">
-            Back to Categories
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">Category Not Found</h3>
+          <p className="text-red-600 mb-6">{errors.fetch || 'The requested category does not exist.'}</p>
+          <Link 
+            href="/admin/categories" 
+            className="inline-flex items-center justify-center px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium w-full"
+          >
+            ← Back to Categories
           </Link>
         </div>
       </div>
@@ -145,116 +160,209 @@ export default function EditCategoryPage() {
   }
 
   return (
-    <div className="p-8">
-      <div className="mb-6">
-        <Link 
-          href="/admin/categories" 
-          className="text-blue-600 hover:text-blue-800 mb-4 inline-block"
-        >
-          ← Back to Categories
-        </Link>
-        <h1 className="text-2xl font-bold">Edit Category</h1>
-        <p className="text-gray-600">Update category details</p>
-      </div>
-      
-      {successMessage && (
-        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-6">
-          {successMessage}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Header Section */}
+        <div className="mb-8">
+          <Link 
+            href="/admin/categories" 
+            className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors mb-4 group"
+          >
+            <svg className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Categories
+          </Link>
+          
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Edit Category
+          </h1>
+          <p className="text-gray-600 mt-2">Update details for "{category.NAME}"</p>
         </div>
-      )}
 
-      {errors.submit && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
-          {errors.submit}
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Edit Form */}
-        <div className="card">
-          <form onSubmit={handleSubmit}>
-            <div className="mb-6">
-              <label className="block text-gray-700 mb-2">
-                Category Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className={`form-input ${errors.name ? 'border-red-500' : ''}`}
-                required
-                maxLength="100"
-              />
-              {errors.name && (
-                <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-              )}
-              <p className="text-gray-500 text-sm mt-1">
-                {formData.name.length}/100 characters
-              </p>
+        {/* Feedback Messages */}
+        {successMessage && (
+          <div className="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg shadow-sm animate-fade-in-down">
+            <div className="flex items-center">
+              <svg className="w-6 h-6 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="text-green-700 font-medium">{successMessage}</span>
             </div>
+          </div>
+        )}
 
-            <div className="flex gap-3">
-              <button 
-                type="submit" 
-                className="btn-primary"
-                disabled={saving}
-              >
-                {saving ? 'Updating...' : 'Update Category'}
-              </button>
-              <Link 
-                href="/admin/categories" 
-                className="btn-secondary"
-              >
-                Cancel
-              </Link>
+        {errors.submit && (
+          <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg shadow-sm animate-fade-in-down">
+            <div className="flex items-center">
+              <svg className="w-6 h-6 text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-red-700">{errors.submit}</span>
             </div>
-          </form>
-        </div>
+          </div>
+        )}
 
-        {/* Category Info */}
-        <div className="space-y-6">
-          <div className="card">
-            <h3 className="text-lg font-semibold mb-4">Category Information</h3>
-            <div className="space-y-3">
-              <div>
-                <span className="text-gray-600">Category ID:</span>
-                <span className="ml-2 font-mono font-medium">{category.CATEGORY_ID}</span>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Edit Form */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="p-6 border-b border-gray-100">
+                <h2 className="text-xl font-semibold text-gray-800">General Information</h2>
               </div>
-              <div>
-                <span className="text-gray-600">Current Name:</span>
-                <span className="ml-2 font-medium">{category.NAME}</span>
-              </div>
-              <div>
-                <span className="text-gray-600">Products in Category:</span>
-                <span className={`ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                  category.PRODUCT_COUNT > 0 
-                    ? 'bg-blue-100 text-blue-800' 
-                    : 'bg-gray-100 text-gray-800'
-                }`}>
-                  {category.PRODUCT_COUNT} product(s)
-                </span>
-              </div>
-              <div>
-                <span className="text-gray-600">Created Date:</span>
-                <span className="ml-2">
-                  {new Date(category.CREATED_DATE).toLocaleDateString()}
-                </span>
+              
+              <div className="p-6">
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-6">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Category Name <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-200 transition-all ${
+                          errors.name 
+                            ? 'border-red-300 focus:border-red-500' 
+                            : 'border-gray-200 focus:border-blue-500'
+                        }`}
+                        placeholder="e.g. Electronics, Summer Collection..."
+                        required
+                        maxLength="100"
+                      />
+                      {errors.name && (
+                        <div className="absolute right-3 top-3.5">
+                          <svg className="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    {errors.name ? (
+                      <p className="text-red-500 text-sm mt-2 flex items-center">
+                        <span className="mr-1">•</span> {errors.name}
+                      </p>
+                    ) : (
+                      <div className="flex justify-between mt-2">
+                        <p className="text-gray-400 text-xs">This name will appear in the product catalog.</p>
+                        <p className={`text-xs ${formData.name.length >= 90 ? 'text-orange-500' : 'text-gray-400'}`}>
+                          {formData.name.length}/100
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-4 pt-4 border-t border-gray-50 mt-6">
+                    <button 
+                      type="submit" 
+                      disabled={saving}
+                      className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+                    >
+                      {saving ? (
+                        <>
+                          <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Saving Changes...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          Save Changes
+                        </>
+                      )}
+                    </button>
+                    
+                    <Link 
+                      href="/admin/categories" 
+                      className="px-6 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-all duration-200"
+                    >
+                      Cancel
+                    </Link>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
 
-          {/* Warning if category has products */}
-          {category.PRODUCT_COUNT > 0 && (
-            <div className="card bg-yellow-50 border-yellow-200">
-              <h4 className="text-yellow-800 font-semibold mb-2">⚠️ Important Notice</h4>
-              <p className="text-yellow-700 text-sm">
-                This category contains {category.PRODUCT_COUNT} product(s). 
-                Changing the category name will affect all products in this category.
-                Categories with products cannot be deleted.
-              </p>
+          {/* Sidebar Info */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Category Stats Card */}
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="p-6 border-b border-gray-100 bg-gray-50">
+                <h3 className="text-lg font-semibold text-gray-800">Category Details</h3>
+              </div>
+              <div className="p-6 space-y-4">
+                <div className="flex items-center justify-between group">
+                  <div className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
+                    </svg>
+                    <span className="text-sm font-medium">ID</span>
+                  </div>
+                  <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded text-gray-700">
+                    {category.CATEGORY_ID}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between group">
+                  <div className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span className="text-sm font-medium">Created</span>
+                  </div>
+                  <span className="text-sm text-gray-700">
+                    {new Date(category.CREATED_DATE).toLocaleDateString()}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between group">
+                  <div className="flex items-center text-gray-600">
+                    <svg className="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                    <span className="text-sm font-medium">Products</span>
+                  </div>
+                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                    category.PRODUCT_COUNT > 0 
+                      ? 'bg-blue-100 text-blue-700' 
+                      : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {category.PRODUCT_COUNT || 0} items
+                  </span>
+                </div>
+              </div>
             </div>
-          )}
+
+            {/* Warning Card */}
+            {category.PRODUCT_COUNT > 0 && (
+              <div className="bg-yellow-50 border-l-4 border-yellow-500 p-6 rounded-xl shadow-lg">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0">
+                    <svg className="h-6 w-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <h3 className="text-lg font-medium text-yellow-800">Impact Warning</h3>
+                    <div className="mt-2 text-sm text-yellow-700">
+                      <p>
+                        This category currently contains <span className="font-bold">{category.PRODUCT_COUNT} product(s)</span>.
+                        Changing the name here will update it across all associated products immediately.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

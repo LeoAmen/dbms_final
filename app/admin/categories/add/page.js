@@ -5,6 +5,8 @@ import Link from 'next/link';
 
 export default function AddCategoryPage() {
   const router = useRouter();
+  
+  // State
   const [formData, setFormData] = useState({
     name: ''
   });
@@ -91,82 +93,184 @@ export default function AddCategoryPage() {
   };
 
   return (
-    <div className="p-8">
-      <div className="mb-6">
-        <Link 
-          href="/admin/categories" 
-          className="text-blue-600 hover:text-blue-800 mb-4 inline-block"
-        >
-          ← Back to Categories
-        </Link>
-        <h1 className="text-2xl font-bold">Add New Category</h1>
-        <p className="text-gray-600">Create a new product category</p>
-      </div>
-      
-      {successMessage && (
-        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded mb-6">
-          {successMessage}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* Header Section */}
+        <div className="mb-8">
+          <Link 
+            href="/admin/categories" 
+            className="inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors mb-4 group"
+          >
+            <svg className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to Categories
+          </Link>
+          
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Add New Category
+          </h1>
+          <p className="text-gray-600 mt-2">Create a new product category to organize your inventory</p>
         </div>
-      )}
 
-      {errors.submit && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
-          {errors.submit}
-        </div>
-      )}
+        {/* Feedback Messages */}
+        {successMessage && (
+          <div className="mb-6 bg-green-50 border-l-4 border-green-500 p-4 rounded-lg shadow-sm animate-fade-in-down">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-medium text-green-800">{successMessage}</p>
+                <p className="text-xs text-green-600 mt-1">Redirecting to categories list...</p>
+              </div>
+            </div>
+          </div>
+        )}
 
-      <div className="card max-w-md">
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6">
-            <label className="block text-gray-700 mb-2">
-              Category Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className={`form-input ${errors.name ? 'border-red-500' : ''}`}
-              placeholder="e.g., Electronics, Clothing, Books"
-              required
-              maxLength="100"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-            )}
-            <p className="text-gray-500 text-sm mt-1">
-              {formData.name.length}/100 characters
-            </p>
+        {errors.submit && (
+          <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-lg shadow-sm animate-fade-in-down">
+            <div className="flex items-center">
+              <svg className="w-6 h-6 text-red-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-red-700">{errors.submit}</span>
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Form Section */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+              <div className="p-6 border-b border-gray-100">
+                <h2 className="text-xl font-semibold text-gray-800">Category Details</h2>
+              </div>
+              
+              <div className="p-6">
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-6">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Category Name <span className="text-red-500">*</span>
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className={`w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-200 transition-all ${
+                          errors.name 
+                            ? 'border-red-300 focus:border-red-500' 
+                            : 'border-gray-200 focus:border-blue-500'
+                        }`}
+                        placeholder="e.g. Electronics, Summer Collection..."
+                        required
+                        maxLength="100"
+                        autoFocus
+                      />
+                      {errors.name && (
+                        <div className="absolute right-3 top-3.5">
+                          <svg className="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                    {errors.name ? (
+                      <p className="text-red-500 text-sm mt-2 flex items-center">
+                        <span className="mr-1">•</span> {errors.name}
+                      </p>
+                    ) : (
+                      <div className="flex justify-between mt-2">
+                        <p className="text-gray-400 text-xs">A descriptive name for your group of products.</p>
+                        <p className={`text-xs ${formData.name.length >= 90 ? 'text-orange-500' : 'text-gray-400'}`}>
+                          {formData.name.length}/100
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-4 pt-4 border-t border-gray-50 mt-6">
+                    <button 
+                      type="submit" 
+                      disabled={loading}
+                      className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
+                    >
+                      {loading ? (
+                        <>
+                          <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Creating...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                          </svg>
+                          Create Category
+                        </>
+                      )}
+                    </button>
+                    
+                    <Link 
+                      href="/admin/categories" 
+                      className="px-6 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-lg hover:border-gray-300 hover:bg-gray-50 transition-all duration-200"
+                    >
+                      Cancel
+                    </Link>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
 
-          <div className="flex gap-3">
-            <button 
-              type="submit" 
-              className="btn-primary"
-              disabled={loading}
-            >
-              {loading ? 'Creating...' : 'Create Category'}
-            </button>
-            <Link 
-              href="/admin/categories" 
-              className="btn-secondary"
-            >
-              Cancel
-            </Link>
+          {/* Tips Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+              <div className="flex items-center mb-4">
+                <div className="p-2 bg-white/20 rounded-lg mr-3">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold">Quick Tips</h3>
+              </div>
+              
+              <ul className="space-y-4 text-indigo-100 text-sm">
+                <li className="flex items-start">
+                  <svg className="w-5 h-5 mr-2 flex-shrink-0 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span><strong>Keep it short:</strong> Short, clear names are easier for customers to browse.</span>
+                </li>
+                <li className="flex items-start">
+                  <svg className="w-5 h-5 mr-2 flex-shrink-0 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span><strong>Use Plurals:</strong> "Electronics" works better than "Electronic".</span>
+                </li>
+                <li className="flex items-start">
+                  <svg className="w-5 h-5 mr-2 flex-shrink-0 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span><strong>Be Specific:</strong> Avoid special characters. Keep names alphanumeric.</span>
+                </li>
+                <li className="flex items-start">
+                  <svg className="w-5 h-5 mr-2 flex-shrink-0 text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <span><strong>Note:</strong> You can edit this later, but categories with products cannot be deleted.</span>
+                </li>
+              </ul>
+            </div>
           </div>
-        </form>
-      </div>
-
-      {/* Tips */}
-      <div className="mt-8 card max-w-md">
-        <h3 className="text-lg font-semibold mb-3">Tips for Creating Categories</h3>
-        <ul className="list-disc pl-5 space-y-2 text-gray-600">
-          <li>Keep category names short and descriptive</li>
-          <li>Use plural form (e.g., "Electronics" not "Electronic")</li>
-          <li>Avoid special characters when possible</li>
-          <li>Categories can be edited or deleted later</li>
-          <li>Categories with products cannot be deleted</li>
-        </ul>
+        </div>
       </div>
     </div>
   );
