@@ -147,7 +147,7 @@ export default function AddProductPage() {
             <div className="space-y-8">
               {/* Product Name */}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <label className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
                   <FiTag className="text-gray-500" />
                   Product Name *
                 </label>
@@ -172,7 +172,7 @@ export default function AddProductPage() {
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <label className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
                   <FiFileText className="text-gray-500" />
                   Description
                 </label>
@@ -198,7 +198,7 @@ export default function AddProductPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Price */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <label className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
                     <FiDollarSign className="text-gray-500" />
                     Price *
                   </label>
@@ -226,7 +226,7 @@ export default function AddProductPage() {
 
                 {/* Stock */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                  <label className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
                     <FiHash className="text-gray-500" />
                     Stock Quantity *
                   </label>
@@ -252,7 +252,7 @@ export default function AddProductPage() {
 
               {/* Category */}
               <div>
-                <label className="block text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                <label className="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
                   <MdCategory className="text-gray-500" />
                   Category *
                 </label>
