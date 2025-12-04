@@ -605,6 +605,7 @@ export default function RegisterPage() {
             transform: scale(4);
             opacity: 0;
           }
+            
         }
         /* confetti fall */
         @keyframes confetti-fall {
