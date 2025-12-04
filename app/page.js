@@ -65,7 +65,7 @@ export default function HomePage() {
             
             <div className="flex items-center space-x-4">
               <a href="/" className="text-gray-700 hover:text-blue-600 font-medium">Home</a>
-              <a href="/products" className="text-gray-700 hover:text-blue-600 font-medium">Products</a>
+              <a href="/admin/dashboard" className="text-gray-700 hover:text-blue-600 font-medium">Admin</a>
               
               <a href="/cart" className="relative">
                 <ShoppingCart className="h-6 w-6 text-gray-700 hover:text-blue-600" />
