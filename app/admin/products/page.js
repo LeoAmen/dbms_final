@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { FiEdit2, FiTrash2, FiPlus, FiPackage, FiDollarSign, FiTrendingUp, FiSearch, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { MdInventory } from 'react-icons/md';
 
@@ -37,14 +37,14 @@ export default function ProductsPage() {
     }
   };
 
-  // Filter products based on search
+  // Filter products based on search - UPDATED to use CATEGORY_NAME
   const filteredProducts = products.filter(product =>
     product.NAME.toLowerCase().includes(searchTerm.toLowerCase()) ||
     product.PRODUCT_ID.toString().includes(searchTerm) ||
-    (product.CATEGORY && product.CATEGORY.toLowerCase().includes(searchTerm.toLowerCase()))
+    (product.CATEGORY_NAME && product.CATEGORY_NAME.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  // Pagination logic
+  // Pagination logic - MOVE THIS BEFORE USING startIndex
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentProducts = filteredProducts.slice(startIndex, startIndex + itemsPerPage);
@@ -205,7 +205,7 @@ export default function ProductsPage() {
                     <td className="p-6">
                       <div className="flex items-center">
                         <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
-                          {product.CATEGORY || 'Uncategorized'}
+                          {product.CATEGORY_NAME || 'Uncategorized'}
                         </span>
                       </div>
                     </td>
@@ -276,7 +276,7 @@ export default function ProductsPage() {
                       (page >= currentPage - 1 && page <= currentPage + 1)
                     )
                     .map((page, index, array) => (
-                      <React.Fragment key={page}>
+                      <Fragment key={page}>
                         {index > 0 && array[index - 1] !== page - 1 && (
                           <span className="px-2">...</span>
                         )}
@@ -290,7 +290,7 @@ export default function ProductsPage() {
                         >
                           {page}
                         </button>
-                      </React.Fragment>
+                      </Fragment>
                     ))}
                 </div>
 

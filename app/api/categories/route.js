@@ -1,28 +1,22 @@
 import { NextResponse } from 'next/server';
 import { executeQuery } from '../../../db/oracle';
 
-// GET all categories with product counts
 export async function GET() {
   try {
     const result = await executeQuery(`
       SELECT 
-        c.*,
-        (SELECT COUNT(*) FROM product p WHERE p.category_id = c.category_id) as product_count
-      FROM category c
-      ORDER BY c.name
+        p.*,
+        c.NAME as CATEGORY_NAME
+      FROM product p
+      LEFT JOIN category c ON p.category_id = c.category_id
+      ORDER BY p.product_id
     `);
     
     return NextResponse.json(result.rows);
   } catch (error) {
-    console.error('Error fetching categories:', error);
-    
-    // If table doesn't exist, return empty array
-    if (error.message.includes('ORA-00942')) {
-      return NextResponse.json([]);
-    }
-    
+    console.error('Error fetching products:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch categories' },
+      { error: 'Failed to fetch products' },
       { status: 500 }
     );
   }
