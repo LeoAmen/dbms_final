@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { 
   FiSave, FiX, FiPackage, FiDollarSign, FiHash, 
   FiTag, FiFileText, FiGrid, FiArrowLeft,
-  FiCheckCircle, FiAlertCircle, FiRefresh, FiEye
+  FiCheckCircle, FiAlertCircle, FiEye
 } from 'react-icons/fi';
 import { MdCategory, MdInventory, MdUpdate } from 'react-icons/md';
 
@@ -269,7 +269,7 @@ export default function EditProductPage() {
                     onClick={() => setErrors({})}
                     className="mt-3 inline-flex items-center gap-2 px-3 py-1 bg-white border border-red-300 text-red-700 text-sm font-medium rounded-lg hover:bg-red-50 transition-colors"
                   >
-                    <FiRefresh />
+                    <FiRefreshCw  />
                     Try Again
                   </button>
                 </div>

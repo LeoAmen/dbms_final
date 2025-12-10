@@ -215,15 +215,6 @@ export default function LoginPage() {
                   'Sign In'
                 )}
               </button>
-
-              {/* Demo Login Button */}
-              <button
-                type="button"
-                onClick={handleDemoLogin}
-                className="w-full py-3 px-4 rounded-lg font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300"
-              >
-                Try Demo Account
-              </button>
             </form>
 
             {/* Register Link */}

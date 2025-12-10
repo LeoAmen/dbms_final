@@ -5,18 +5,25 @@ export async function GET() {
   try {
     const result = await executeQuery(`
       SELECT 
-        p.*,
-        c.NAME as CATEGORY_NAME
-      FROM product p
-      LEFT JOIN category c ON p.category_id = c.category_id
-      ORDER BY p.product_id
+        c.*,
+        COUNT(p.product_id) as PRODUCT_COUNT
+      FROM category c
+      LEFT JOIN product p ON c.category_id = p.category_id
+      GROUP BY c.category_id, c.name, c.created_date
+      ORDER BY c.name
     `);
     
     return NextResponse.json(result.rows);
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error('Error fetching categories:', error);
+    
+    // If the table doesn't exist, return empty array for now
+    if (error.message.includes('ORA-00942')) {
+      return NextResponse.json([]);
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to fetch products' },
+      { error: 'Failed to fetch categories' },
       { status: 500 }
     );
   }
@@ -34,18 +41,16 @@ export async function POST(request) {
       );
     }
     
-    console.log('📝 Creating category:', name.trim());
-    
-    // SIMPLE INSERT without RETURNING clause
+    // Create category
     await executeQuery(
       `INSERT INTO category (name) VALUES (:1)`,
       [name.trim()]
     );
     
-    // Get the newly created category ID
+    // Get the newly created category
     const getCategoryQuery = `
-      SELECT category_id 
-      FROM category 
+      SELECT c.*, 0 as PRODUCT_COUNT
+      FROM category c
       WHERE name = :1 
       AND ROWNUM = 1 
       ORDER BY category_id DESC
@@ -54,30 +59,20 @@ export async function POST(request) {
     const categoryResult = await executeQuery(getCategoryQuery, [name.trim()]);
     
     if (categoryResult.rows.length === 0) {
-      // Fallback: get the maximum category_id
-      const maxIdResult = await executeQuery(
-        'SELECT MAX(category_id) as max_id FROM category'
-      );
-      
-      const categoryId = maxIdResult.rows[0]?.MAX_ID;
-      
       return NextResponse.json(
         { 
           success: true, 
-          message: 'Category created successfully',
-          category_id: categoryId 
+          message: 'Category created successfully'
         },
         { status: 201 }
       );
     }
     
-    const categoryId = categoryResult.rows[0].CATEGORY_ID;
-    
     return NextResponse.json(
       { 
         success: true, 
         message: 'Category created successfully',
-        category_id: categoryId 
+        category: categoryResult.rows[0]
       },
       { status: 201 }
     );
@@ -87,19 +82,10 @@ export async function POST(request) {
     
     // Handle duplicate category name
     if (error.message.includes('unique constraint') || 
-        error.message.includes('ORA-00001') ||
-        error.message.includes('ORA-01400')) {
+        error.message.includes('ORA-00001')) {
       return NextResponse.json(
         { error: 'Category name already exists' },
         { status: 400 }
-      );
-    }
-    
-    // Handle table doesn't exist
-    if (error.message.includes('ORA-00942')) {
-      return NextResponse.json(
-        { error: 'Category table does not exist. Please run the SQL script first.' },
-        { status: 500 }
       );
     }
     

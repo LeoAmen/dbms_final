@@ -174,15 +174,6 @@ export default function CheckoutPage() {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Shipping Details</h3>
               
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                  <input
-                    type="text"
-                    value={customer.NAME || customer.CUSTOMER_NAME}
-                    disabled
-                    className="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded text-gray-600"
-                  />
-                </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>

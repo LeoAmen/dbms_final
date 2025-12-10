@@ -6,7 +6,7 @@ oracledb.autoCommit = true;
 // Use environment variables
 const dbConfig = {
   user: process.env.ORACLE_USER || 'system',
-  password: process.env.ORACLE_PASSWORD || 'leo',
+  password: process.env.ORACLE_PASSWORD || 'amen',
   connectString: process.env.ORACLE_CONNECTION_STRING || 'localhost:1521/XE'
 };
 

@@ -26,16 +26,37 @@ export default function ProductsPage() {
     }
   };
 
-  const deleteProduct = async (productId) => {
-    if (confirm('Are you sure you want to delete this product?')) {
-      try {
-        await fetch(`/api/products/${productId}`, { method: 'DELETE' });
-        fetchProducts();
-      } catch (error) {
-        console.error('Error deleting product:', error);
+ const deleteProduct = async (productId) => {
+  if (!confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/api/products/${productId}`, { 
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
       }
+    });
+    
+    const result = await response.json();
+    
+    if (!response.ok) {
+      alert(result.error || 'Failed to delete product');
+      return;
     }
-  };
+    
+    // Show success message
+    alert('Product deleted successfully!');
+    
+    // Refresh the products list
+    fetchProducts();
+    
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    alert('An error occurred while deleting the product');
+  }
+};
 
   // Filter products based on search - UPDATED to use CATEGORY_NAME
   const filteredProducts = products.filter(product =>
